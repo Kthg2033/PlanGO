@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Hábitos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let habito of habitos">
+      <ion-label>{{ habito.nombre }}</ion-label>
+      <ion-toggle slot="end" [(ngModel)]="habito.cumplido"></ion-toggle>
+    </ion-item>
+  </ion-list>
+</ion-content>
