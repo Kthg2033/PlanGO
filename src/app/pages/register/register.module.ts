@@ -1,20 +1,19 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { NgModule }      from '@angular/core';
+import { CommonModule }  from '@angular/common';
+import { FormsModule }   from '@angular/forms';   // necesario para [(ngModel)]
+import { IonicModule }   from '@ionic/angular';
+import { RouterModule }  from '@angular/router';
 
-import { IonicModule } from '@ionic/angular';
-
-import { RegisterPageRoutingModule } from './register-routing.module';
-
-import { RegisterPage } from './register.page';
+import { RegisterPage }  from './register.page';
 
 @NgModule({
+  declarations: [RegisterPage],
   imports: [
     CommonModule,
-    FormsModule,
+    FormsModule,                            // va en el módulo, no en el componente
     IonicModule,
-    RegisterPageRoutingModule
+    RouterModule.forChild([{ path: '', component: RegisterPage }]),
   ],
-  declarations: [RegisterPage]
 })
 export class RegisterPageModule {}
+

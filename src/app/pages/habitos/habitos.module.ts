@@ -11,7 +11,6 @@ import { HabitosPage } from './habitos.page';
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     IonicModule,
     HabitosPageRoutingModule
   ],

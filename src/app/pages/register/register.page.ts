@@ -1,21 +1,22 @@
+// pages/register/register.page.ts
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
-
-  selector: 'app-register',
+  selector: 'app-root',
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   
 })
 export class RegisterPage {
-  usuario = '';
-  password = '';
-
-  constructor(private router: Router) {}
+  usuario  = 'jose tapia';
+  password = '123456';
 
   registrar() {
-    alert('¡Usuario registrado!');
-    this.router.navigate(['/login']);
+    if (this.usuario.trim() && this.password.trim()) {
+      alert('¡Usuario registrado!');
+    } else {
+      alert('Por favor completa todos los campos.');
+    }
   }
 }
+

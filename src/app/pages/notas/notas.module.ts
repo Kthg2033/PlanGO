@@ -9,7 +9,6 @@ import { NotasPage } from './notas.page';   // Aquí debe decir NotasPage
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     IonicModule,
     NotasPageRoutingModule
   ],
