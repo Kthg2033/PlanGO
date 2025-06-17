@@ -1,18 +1,40 @@
-<ion-menu contentId="main-content">
-  <ion-header>
-    <ion-toolbar color="primary">
-      <ion-title>PlanGO</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list>
-      <ion-item routerLink="/home">Resumen</ion-item>
-      <ion-item routerLink="/agenda">Agenda Diaria</ion-item>
-      <ion-item routerLink="/tareas">Tareas</ion-item>
-      <ion-item routerLink="/habitos">Hábitos</ion-item>
-      <ion-item routerLink="/notas">Notas</ion-item>
-    </ion-list>
-  </ion-content>
-</ion-menu>
+<ion-app>
+  <!-- Menú lateral -->
+  <ion-menu contentId="main-content">
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>PlanGO</ion-title>
+      </ion-toolbar>
+    </ion-header>
 
-<ion-router-outlet id="main-content"></ion-router-outlet>
+    <ion-content class="ion-padding">
+      <!-- Perfil de usuario -->
+      <div class="perfil-usuario" style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+        <ion-avatar slot="start">
+          <img [src]="fotoPerfil || 'assets/icon/perfil_foto.png'" alt="Foto de perfil" />
+
+       </ion-avatar>
+        <div class="info-usuario">
+          <h2 style="margin: 0; font-size: 16px;">{{ nombreUsuario || 'Usuario' }}</h2>
+          <p style="margin: 0; font-size: 14px; color: gray;">Bienvenido</p>
+        </div>
+      </div>
+
+      <ion-list>
+        <ion-item routerLink="/home" routerDirection="root">Inicio</ion-item>
+        <ion-item routerLink="/agenda" routerDirection="root">Agenda</ion-item>
+        <ion-item routerLink="/habitos" routerDirection="root">Hábitos</ion-item>
+        <ion-item routerLink="/notas" routerDirection="root">Notas</ion-item>
+        <ion-item routerLink="/perfil" routerDirection="root">Perfil</ion-item>
+        <ion-item button color="danger" (click)="logout()">Cerrar sesión</ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <!-- Contenido principal -->
+  <ion-router-outlet id="main-content"></ion-router-outlet>
+</ion-app>
+
+
+
+ 

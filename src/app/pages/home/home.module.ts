@@ -1,18 +1,22 @@
-// src/app/pages/home/home.module.ts
-
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-
-import { HomePageRoutingModule } from './home-routing.module';
-import { HomePage } from './home.page'; // 👈 Importante que exista este archivo
+import { RouterModule } from '@angular/router';
+import { HomePage } from './home.page';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     IonicModule,
-    HomePageRoutingModule,
+    RouterModule.forChild([{ path: '', component: HomePage }]),
+    FullCalendarModule
   ],
-  declarations: [HomePage], // 👈 Que esté declarado
+  declarations: [HomePage]
 })
 export class HomePageModule {}
+
+
+

@@ -1,0 +1,97 @@
+ion-content {
+  --background: linear-gradient(to bottom right, #f0f4f8, #d9e2ec);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  .login-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .logo {
+      width: 100px;
+      height: auto;
+      border-radius: 50%;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    h6 {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #444;
+      margin-bottom: 2rem;
+    }
+
+    ion-item {
+      --background: transparent;
+      margin-bottom: 1rem;
+
+      ion-label {
+        color: #666;
+        font-weight: 500;
+      }
+
+      ion-input {
+        --padding-start: 8px;
+      }
+    }
+
+    ion-button {
+      --background: #0077cc;
+      --background-activated: #005fa3;
+      --box-shadow: 0 4px 12px rgba(0, 119, 204, 0.5);
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    .registro-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1.5rem;
+
+      ion-label {
+        font-size: 0.9rem;
+        color: #555;
+      }
+
+      ion-button {
+        color: #0077cc !important;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: underline;
+        padding: 0;
+        --padding-start: 0;
+        --padding-end: 0;
+        --background: transparent;
+        --box-shadow: none;
+        --ripple-color: transparent;
+      }
+    }
+  }
+}

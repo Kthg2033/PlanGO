@@ -1,28 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Resumen Diario</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Calendario</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Tareas Completadas</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>{{ tareasCompletadas }} tareas completadas hoy</ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Hábitos Cumplidos</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>{{ habitosCumplidos }} hábitos esta semana</ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Eventos de hoy</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>{{ eventosHoy }} eventos programados</ion-card-content>
-  </ion-card>
+  <full-calendar [options]="calendarOptions"></full-calendar>
 </ion-content>

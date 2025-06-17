@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-habitos',
   templateUrl: './habitos.page.html',
   styleUrls: ['./habitos.page.scss'],
+  standalone: false // explícitamente no standalone
 })
 export class HabitosPage {
   habitos = [

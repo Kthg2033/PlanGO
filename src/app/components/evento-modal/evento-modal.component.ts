@@ -1,0 +1,98 @@
+import { Component, Input } from '@angular/core';
+import { ModalController, IonicModule } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+
+
+@Component({
+  selector: 'app-evento-modal',
+  standalone: true,
+  template: `
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Nuevo Evento</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="cerrar()">Cerrar</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <ion-item>
+        <ion-label position="floating">Título</ion-label>
+        <ion-input [(ngModel)]="evento.titulo"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Ubicación</ion-label>
+        <ion-input [(ngModel)]="evento.ubicacion"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Todo el día</ion-label>
+        <ion-toggle [(ngModel)]="evento.todoDia"></ion-toggle>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Empieza</ion-label>
+        <ion-datetime [(ngModel)]="evento.fechaInicio" presentation="date-time"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Termina</ion-label>
+        <ion-datetime [(ngModel)]="evento.fechaFin" presentation="date-time"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Repetir</ion-label>
+        <ion-select [(ngModel)]="evento.repetir">
+          <ion-select-option value="ninguno">Ninguno</ion-select-option>
+          <ion-select-option value="diario">Diario</ion-select-option>
+          <ion-select-option value="semanal">Semanal</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Alerta</ion-label>
+        <ion-select [(ngModel)]="evento.alerta">
+          <ion-select-option value="sin-alerta">Sin alerta</ion-select-option>
+          <ion-select-option value="5-min">5 minutos antes</ion-select-option>
+          <ion-select-option value="1-hr">1 hora antes</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Notas</ion-label>
+        <ion-textarea [(ngModel)]="evento.notas"></ion-textarea>
+      </ion-item>
+
+      <ion-button expand="block" (click)="guardar()">Guardar</ion-button>
+    </ion-content>
+  `,
+  imports: [CommonModule, FormsModule, IonicModule]
+})
+export class EventoModalComponent {
+  @Input() fechaSeleccionada!: string;
+
+  evento = {
+    titulo: '', 
+    ubicacion: '',
+    todoDia: false,
+    fechaInicio: '',
+    fechaFin: '',
+    repetir: '',
+    alerta: '',
+    notas: ''
+  };
+
+  constructor(private modalCtrl: ModalController) {}
+
+  cerrar() {
+    this.modalCtrl.dismiss();
+  }
+
+  guardar() {
+    this.modalCtrl.dismiss(this.evento);
+  }
+}

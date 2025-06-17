@@ -1,20 +1,23 @@
+// src/app/pages/tareas/tareas.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
-import { TareasPageRoutingModule } from './tareas-routing.module';
+import { RouterModule, Routes } from '@angular/router';
 
 import { TareasPage } from './tareas.page';
 
+const routes: Routes = [
+  { path: '', component: TareasPage }
+];
+
 @NgModule({
+  declarations: [TareasPage],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TareasPageRoutingModule
-  ],
-  declarations: [TareasPage]
+    RouterModule.forChild(routes)
+  ]
 })
 export class TareasPageModule {}

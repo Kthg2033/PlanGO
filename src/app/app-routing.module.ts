@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -13,27 +13,31 @@ const routes: Routes = [
   },
   {
     path: 'agenda',
-    loadComponent: () => import('./pages/agenda/agenda.page').then(m => m.AgendaPage)
+    loadChildren: () => import('./pages/agenda/agenda.module').then(m => m.AgendaPageModule)
   },
   {
     path: 'tareas',
-    loadComponent: () => import('./pages/tareas/tareas.page').then(m => m.TareasPage)
+    loadChildren: () => import('./pages/tareas/tareas.module').then(m => m.TareasPageModule)
   },
   {
     path: 'habitos',
-    loadComponent: () => import('./pages/habitos/habitos.page').then(m => m.HabitosPage)
+    loadChildren: () => import('./pages/habitos/habitos.module').then(m => m.HabitosPageModule)
   },
   {
     path: 'notas',
-    loadComponent: () => import('./pages/notas/notas.page').then(m => m.NotasPage)
+    loadChildren: () => import('./pages/notas/notas.module').then(m => m.NotasPageModule)
   },
   {
     path: 'register',
-    loadComponent: () => import('./pages/register/register.page').then(m => m.RegisterPage)
+    loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule)
   },
   {
     path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
+  },
+  {
+    path: 'perfil',
+    loadChildren: () => import('./pages/perfil/perfil.module').then(m => m.PerfilPageModule)
   }
 ];
 
@@ -41,4 +45,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
+
