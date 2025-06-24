@@ -1,10 +1,9 @@
-// src/app/pages/habitos/habitos.module.ts
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { RouterModule } from '@angular/router';
 
-import { HabitosPageRoutingModule } from './habitos-routing.module';
 import { HabitosPage } from './habitos.page';
 
 @NgModule({
@@ -13,7 +12,7 @@ import { HabitosPage } from './habitos.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    HabitosPageRoutingModule
+    RouterModule.forChild([{ path: '', component: HabitosPage }])
   ]
 })
 export class HabitosPageModule {}

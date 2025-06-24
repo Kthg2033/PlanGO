@@ -7,7 +7,7 @@ import { AgendaPage } from './agenda.page';
   imports: [
     CommonModule,
     IonicModule,
-    AgendaPage  // ✅ Importas en vez de declarar
+    AgendaPage  // 
   ]
 })
 export class AgendaPageModule {}

@@ -45,7 +45,7 @@ export class HomePage {
 
         const eventos = Array.isArray(this.calendarOptions.events) ? this.calendarOptions.events : [];
         this.calendarOptions.events = [...eventos, nuevoEvento];
-        this.eventosService.agregarEvento(nuevoEvento); // ✅ Guardado para Agenda
+        this.eventosService.agregarEvento(nuevoEvento); // 
       }
     });
 

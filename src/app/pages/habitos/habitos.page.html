@@ -1,14 +1,47 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Hábitos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="agregarHabito()">AGREGAR</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+
+  <!-- Filtros -->
+  <ion-item>
+    <ion-label>Prioridad</ion-label>
+    <ion-select [(ngModel)]="filtroPrioridad">
+      <ion-select-option value="Todas">Todas</ion-select-option>
+      <ion-select-option value="Alta">Alta</ion-select-option>
+      <ion-select-option value="Media">Media</ion-select-option>
+      <ion-select-option value="Baja">Baja</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Frecuencia</ion-label>
+    <ion-select [(ngModel)]="filtroFrecuencia">
+      <ion-select-option value="Todas">Todas</ion-select-option>
+      <ion-select-option value="Diario">Diario</ion-select-option>
+      <ion-select-option value="Semanal">Semanal</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Lista de hábitos -->
   <ion-list>
-    <ion-item *ngFor="let habito of habitos">
-      <ion-label>{{ habito.nombre }}</ion-label>
-      <ion-toggle slot="end" [(ngModel)]="habito.cumplido"></ion-toggle>
+    <ion-item *ngFor="let habito of habitosFiltrados">
+      <ion-checkbox slot="start" [(ngModel)]="habito.completado" (ionChange)="toggleCompletado(habito)"></ion-checkbox>
+      <ion-label>
+        <h2>{{ habito.nombre }}</h2>
+        <p>Prioridad: {{ habito.prioridad }} | Frecuencia: {{ habito.frecuencia }}</p>
+        <p *ngIf="habito.fecha">Última vez: {{ habito.fecha }}</p>
+      </ion-label>
+      <ion-button fill="clear" color="danger" slot="end" (click)="eliminarHabito(habito)">
+        🗑️
+      </ion-button>
     </ion-item>
   </ion-list>
+
 </ion-content>
