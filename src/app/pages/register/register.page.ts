@@ -3,6 +3,18 @@ import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
+interface Usuario {
+  nombres: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
+  genero: string;
+  fechaNacimiento: string;
+  email: string;
+  telefono: string;
+  pais: string;
+  contrasena: string;
+}
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
@@ -10,7 +22,7 @@ import { NgForm } from '@angular/forms';
   standalone: false,
 })
 export class RegisterPage {
-  usuario = {
+  usuario: Usuario = {
     nombres: '',
     apellidoPaterno: '',
     apellidoMaterno: '',
@@ -18,9 +30,11 @@ export class RegisterPage {
     fechaNacimiento: '',
     email: '',
     telefono: '',
-    pais: ''
+    pais: '',
+    contrasena: ''
   };
 
+  confirmarContrasena = '';
   fechaFormateada = '';
 
   constructor(
@@ -44,17 +58,15 @@ export class RegisterPage {
     this.router.navigate(['/login']);
   }
 
-  guardarFecha(event: Event) {
-    const customEvent = event as CustomEvent;
-    const valor = customEvent.detail.value;
+  guardarFecha(event: CustomEvent) {
+    const valor = event.detail.value;
     this.usuario.fechaNacimiento = valor;
 
     const fecha = new Date(valor);
-    const opciones: Intl.DateTimeFormatOptions = {
+    this.fechaFormateada = fecha.toLocaleDateString('es-CL', {
       day: '2-digit',
       month: 'long',
       year: 'numeric'
-    };
-    this.fechaFormateada = fecha.toLocaleDateString('es-CL', opciones);
+    });
   }
 }

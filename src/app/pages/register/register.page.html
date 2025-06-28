@@ -1,14 +1,19 @@
 <ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Registro de Usuario</ion-title>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login" text="" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Registrarse</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <ion-card>
     <ion-card-header>
+      <ion-card-subtitle>
+        POR FAVOR COMPLETA TODOS LOS CAMPOS
+      </ion-card-subtitle>
       <ion-card-title>Crear Cuenta</ion-card-title>
-      <ion-card-subtitle>Por favor completa todos los campos</ion-card-subtitle>
     </ion-card-header>
 
     <ion-card-content>
@@ -16,17 +21,17 @@
 
         <ion-item>
           <ion-label position="floating">Nombres</ion-label>
-          <ion-input type="text" [(ngModel)]="usuario.nombres" name="nombres" required></ion-input>
+          <ion-input [(ngModel)]="usuario.nombres" name="nombres" required></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating">Apellido Paterno</ion-label>
-          <ion-input type="text" [(ngModel)]="usuario.apellidoPaterno" name="apellidoPaterno" required></ion-input>
+          <ion-input [(ngModel)]="usuario.apellidoPaterno" name="apellidoPaterno" required></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating">Apellido Materno</ion-label>
-          <ion-input type="text" [(ngModel)]="usuario.apellidoMaterno" name="apellidoMaterno" required></ion-input>
+          <ion-input [(ngModel)]="usuario.apellidoMaterno" name="apellidoMaterno" required></ion-input>
         </ion-item>
 
         <ion-item>
@@ -37,28 +42,20 @@
           </ion-select>
         </ion-item>
 
-       
+        <!-- 🎯 Fecha de Nacimiento -->
         <ion-item>
           <ion-label>Fecha de Nacimiento</ion-label>
-          <ion-datetime-button datetime="fechaNacimiento"></ion-datetime-button>
+          <ion-datetime
+            [(ngModel)]="usuario.fechaNacimiento"
+            name="fechaNacimiento"
+            presentation="date"
+            preferWheel="true"
+            cancelText="Cancelar"
+            doneText="Aceptar"
+            showDefaultButtons="true"
+            (ionChange)="guardarFecha($any($event))">
+          </ion-datetime>
         </ion-item>
-
-        <ion-modal trigger="fechaNacimiento">
-          <ng-template>
-            <ion-datetime
-              id="fechaNacimiento"
-              name="fechaNacimiento"
-              presentation="date"
-              [(ngModel)]="usuario.fechaNacimiento"
-              preferWheel="false"
-              showDefaultButtons="true"
-              cancelText="Cancelar"
-              doneText="Aceptar"
-              max="2025-12-31"
-              (ionConfirm)="guardarFecha($event)">
-            </ion-datetime>
-          </ng-template>
-        </ion-modal>
 
         <ion-text color="medium" class="ion-margin-start" *ngIf="fechaFormateada">
           <p>Fecha seleccionada: {{ fechaFormateada }}</p>
@@ -66,12 +63,12 @@
 
         <ion-item>
           <ion-label position="floating">Correo Electrónico</ion-label>
-          <ion-input type="email" [(ngModel)]="usuario.email" name="email" required></ion-input>
+          <ion-input [(ngModel)]="usuario.email" name="email" type="email" required></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating">Teléfono Celular</ion-label>
-          <ion-input type="tel" [(ngModel)]="usuario.telefono" name="telefono" required></ion-input>
+          <ion-input [(ngModel)]="usuario.telefono" name="telefono" type="tel" required></ion-input>
         </ion-item>
 
         <ion-item>
@@ -84,12 +81,10 @@
           </ion-select>
         </ion-item>
 
-        <ion-button expand="full" type="submit" class="ion-margin-top" [disabled]="formulario.invalid">
+        <ion-button expand="full" type="submit" class="guardar-btn ion-margin-top" [disabled]="formulario.invalid">
           Registrarse
         </ion-button>
-
       </form>
     </ion-card-content>
   </ion-card>
 </ion-content>
-

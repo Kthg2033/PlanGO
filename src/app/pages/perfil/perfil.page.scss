@@ -19,4 +19,18 @@ ion-avatar img {
   height: 100%;
   object-fit: cover;
 }
- 
+
+/* botón de cambiar foto, cambiar contraseña y guardar cambios */
+ion-button {
+  --background: #6a61cc;
+  --background-activated: #5a52b2;
+  --color: #fff;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+/* barra superior */
+ion-toolbar {
+  --background: #6980d3; /* color barra principal */
+  --color: #ffffff;      /* texto blanco */
+}

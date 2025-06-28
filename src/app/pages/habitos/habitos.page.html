@@ -1,47 +1,44 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Hábitos</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="agregarHabito()">AGREGAR</ion-button>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="" color="light"></ion-back-button>
     </ion-buttons>
+    <ion-title>Mis Hábitos</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <!-- Plantillas para elegir hábitos -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Elige un hábito para empezar</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="template-list">
+        <ion-chip *ngFor="let h of habitTemplates" (click)="agregarHabito(h)">
+          <ion-label>{{ h.icono }} {{ h.nombre }}</ion-label>
+        </ion-chip>
+      </div>
+    </ion-card-content>
+  </ion-card>
 
-  <!-- Filtros -->
-  <ion-item>
-    <ion-label>Prioridad</ion-label>
-    <ion-select [(ngModel)]="filtroPrioridad">
-      <ion-select-option value="Todas">Todas</ion-select-option>
-      <ion-select-option value="Alta">Alta</ion-select-option>
-      <ion-select-option value="Media">Media</ion-select-option>
-      <ion-select-option value="Baja">Baja</ion-select-option>
-    </ion-select>
-  </ion-item>
-
-  <ion-item>
-    <ion-label>Frecuencia</ion-label>
-    <ion-select [(ngModel)]="filtroFrecuencia">
-      <ion-select-option value="Todas">Todas</ion-select-option>
-      <ion-select-option value="Diario">Diario</ion-select-option>
-      <ion-select-option value="Semanal">Semanal</ion-select-option>
-    </ion-select>
-  </ion-item>
-
-  <!-- Lista de hábitos -->
-  <ion-list>
-    <ion-item *ngFor="let habito of habitosFiltrados">
-      <ion-checkbox slot="start" [(ngModel)]="habito.completado" (ionChange)="toggleCompletado(habito)"></ion-checkbox>
-      <ion-label>
-        <h2>{{ habito.nombre }}</h2>
-        <p>Prioridad: {{ habito.prioridad }} | Frecuencia: {{ habito.frecuencia }}</p>
-        <p *ngIf="habito.fecha">Última vez: {{ habito.fecha }}</p>
-      </ion-label>
-      <ion-button fill="clear" color="danger" slot="end" (click)="eliminarHabito(habito)">
-        🗑️
-      </ion-button>
-    </ion-item>
-  </ion-list>
-
+  <!-- Lista de hábitos activos -->
+  <ion-card *ngFor="let h of habitosFiltrados" [style.border-left]=" '8px solid ' + h.color ">
+    <ion-card-header>
+      <ion-card-title>{{ h.icono }} {{ h.nombre }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="dias">
+        <button *ngFor="let d of h.dias; index as i"
+                [class.completado]="h.dias[i]"
+                (click)="toggleDia(h, i)">
+          {{ ['L', 'M', 'X', 'J', 'V', 'S', 'D'][i] }}
+        </button>
+      </div>
+      <ion-progress-bar [value]="progreso(h)/7" color="success"></ion-progress-bar>
+      <div *ngIf="h.racha >= 3" class="badge">
+        🔥 ¡Racha: {{ h.racha }} días!
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

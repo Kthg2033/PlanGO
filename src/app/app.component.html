@@ -1,40 +1,42 @@
-<ion-app>
-  <!-- Menú lateral -->
-  <ion-menu contentId="main-content">
-    <ion-header>
-      <ion-toolbar color="primary">
-        <ion-title>PlanGO</ion-title>
-      </ion-toolbar>
-    </ion-header>
+<ion-menu *ngIf="showMenu" contentId="main-content" type="overlay">
+  <ion-header>
+    <ion-toolbar class="toolbar-menu">
+      <ion-title>Menú</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
-    <ion-content class="ion-padding">
-      <!-- Perfil de usuario -->
-      <div class="perfil-usuario" style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+  <ion-content>
+    <ion-list class="ion-no-padding">
+      <ion-item lines="none">
         <ion-avatar slot="start">
-          <img [src]="fotoPerfil || 'assets/icon/perfil_foto.png'" alt="Foto de perfil" />
+          <img [src]="fotoPerfil || 'assets/avatar-default.png'" alt="Foto de perfil">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ nombreUsuario || 'Usuario' }}</h2>
+          <p>Bienvenido</p>
+        </ion-label>
+      </ion-item>
 
-       </ion-avatar>
-        <div class="info-usuario">
-          <h2 style="margin: 0; font-size: 16px;">{{ nombreUsuario || 'Usuario' }}</h2>
-          <p style="margin: 0; font-size: 14px; color: gray;">Bienvenido</p>
-        </div>
-      </div>
+      <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
+        <ion-item
+          [routerLink]="p.url"
+          routerDirection="root"
+          routerLinkActive="selected"
+          detail="false"
+          lines="full">
+          <ion-icon slot="start" [name]="p.icon"></ion-icon>
+          <ion-label>{{ p.title }}</ion-label>
+        </ion-item>
+      </ion-menu-toggle>
+    </ion-list>
 
-      <ion-list>
-        <ion-item routerLink="/home" routerDirection="root">Inicio</ion-item>
-        <ion-item routerLink="/agenda" routerDirection="root">Agenda</ion-item>
-        <ion-item routerLink="/habitos" routerDirection="root">Hábitos</ion-item>
-        <ion-item routerLink="/notas" routerDirection="root">Notas</ion-item>
-        <ion-item routerLink="/perfil" routerDirection="root">Perfil</ion-item>
-        <ion-item button color="danger" (click)="logout()">Cerrar sesión</ion-item>
-      </ion-list>
-    </ion-content>
-  </ion-menu>
+    <ion-button expand="full" color="danger" class="ion-margin" (click)="logout()">
+      Cerrar sesión
+    </ion-button>
+  </ion-content>
+</ion-menu>
 
-  <!-- Contenido principal -->
-  <ion-router-outlet id="main-content"></ion-router-outlet>
-</ion-app>
-
-
-
- 
+<!-- Contenido principal -->
+<div class="ion-page" id="main-content">
+  <ion-router-outlet></ion-router-outlet>
+</div>

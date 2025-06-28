@@ -1,85 +1,49 @@
 import { Component } from '@angular/core';
-import { HabitosService, Habito } from 'src/app/services/habitos.service';
-import { AlertController } from '@ionic/angular';
+
+interface Habito {
+  icono: string;
+  nombre: string;
+  color: string;
+  dias: boolean[];
+  racha: number;
+}
 
 @Component({
   selector: 'app-habitos',
   templateUrl: './habitos.page.html',
   styleUrls: ['./habitos.page.scss'],
-  standalone: false
+  standalone:false,
 })
 export class HabitosPage {
-  habitos: Habito[] = [];
+  habitTemplates: Omit<Habito, 'dias' | 'racha'>[] = [
+    { icono: '🚶', nombre: 'Caminar 30 min', color: '#4caf50' },
+    { icono: '🚰', nombre: 'Beber 2L de agua', color: '#2196f3' },
+    { icono: '🧘', nombre: 'Meditar 10 min', color: '#9c27b0' },
+    { icono: '📖', nombre: 'Leer 15 min', color: '#ff9800' },
+    { icono: '💤', nombre: 'Dormir 7h', color: '#3f51b5' },
+    { icono: '🏃', nombre: 'Correr 20 min', color: '#f44336' },
+    { icono: '🙏', nombre: 'Gratitud diaria', color: '#795548' },
+  ];
 
-  filtroPrioridad: 'Todas' | 'Alta' | 'Media' | 'Baja' = 'Todas';
-  filtroFrecuencia: 'Todas' | 'Diario' | 'Semanal' = 'Todas';
+  habitosFiltrados: Habito[] = [];
 
-  constructor(
-    private habitosService: HabitosService,
-    private alertController: AlertController
-  ) {}
-
-  ionViewWillEnter() {
-    this.habitos = this.habitosService.getAll();
+  agregarHabito(template: Omit<Habito, 'dias' | 'racha'>): void {
+    const nuevoHabito: Habito = {
+      icono: template.icono,
+      nombre: template.nombre,
+      color: template.color,
+      dias: [false, false, false, false, false, false, false],
+      racha: 0
+    };
+    this.habitosFiltrados.push(nuevoHabito);
   }
 
-  get habitosFiltrados(): Habito[] {
-    return this.habitos.filter(h =>
-      (this.filtroPrioridad === 'Todas' || h.prioridad === this.filtroPrioridad) &&
-      (this.filtroFrecuencia === 'Todas' || h.frecuencia === this.filtroFrecuencia)
-    );
+  toggleDia(habito: Habito, index: number): void {
+    habito.dias[index] = !habito.dias[index];
+    habito.racha = habito.dias.filter((d: boolean) => d).length;
   }
 
-  async agregarHabito() {
-    const alert = await this.alertController.create({
-      header: 'Nuevo Hábito',
-      inputs: [
-        {
-          type: 'text',
-          name: 'nombre',
-          placeholder: 'Nombre del hábito'
-        }
-      ],
-      buttons: [
-        { text: 'Cancelar', role: 'cancel' },
-        {
-          text: 'Agregar',
-          handler: (data) => {
-            if (!data.nombre?.trim()) return false;
-
-            const nuevo: Habito = {
-              id: this.generarID(),
-              nombre: data.nombre.trim(),
-              prioridad: 'Media',          
-              frecuencia: 'Diario',        
-              completado: false,
-              fecha: '',
-              racha: 0
-            };
-
-            this.habitosService.add(nuevo);
-            this.habitos = this.habitosService.getAll();
-            return true;
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-  }
-
-  toggleCompletado(h: Habito) {
-    h.completado = !h.completado;
-    h.fecha = new Date().toISOString().split('T')[0];
-    this.habitosService.update(h);
-  }
-
-  eliminarHabito(h: Habito) {
-    this.habitosService.remove(h.id);
-    this.habitos = this.habitosService.getAll();
-  }
-
-  private generarID(): string {
-    return Date.now().toString(36) + Math.random().toString(36).substring(2, 8);
+  progreso(habito: Habito): number {
+    return habito.dias.filter((d: boolean) => d).length;
   }
 }

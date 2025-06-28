@@ -1,43 +1,21 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-agenda',
-  standalone: true,
+  standalone:false,
   templateUrl: './agenda.page.html',
-  styleUrls: ['./agenda.page.scss'],
-  imports: [CommonModule, IonicModule, FormsModule]
+  styleUrls: ['./agenda.page.scss']
 })
-export class AgendaPage {
-  fechaSeleccionada: string = '';
-
-  eventosOriginales = [
-    { fecha: '2025-06-17', hora: '09:00', descripcion: 'Reunión', completado: 'No' },
-    { fecha: '2025-06-18', hora: '14:00', descripcion: 'Clase', completado: 'No' }
-  ];
-
+export class AgendaPage implements OnInit {
   eventos: any[] = [];
 
-  constructor(private route: ActivatedRoute) {
-    this.route.queryParams.subscribe(params => {
-      this.fechaSeleccionada = params['fecha'] || '';
-      this.filtrarEventosPorFecha();
-    });
-  }
+  ngOnInit() {
+    const guardados = localStorage.getItem('eventos');
+    if (guardados) {
+      this.eventos = JSON.parse(guardados);
 
-  filtrarEventosPorFecha() {
-    if (this.fechaSeleccionada) {
-      this.eventos = this.eventosOriginales.filter(e => e.fecha === this.fechaSeleccionada);
-    } else {
-      this.eventos = this.eventosOriginales;
+      // Ordenar por fecha y hora
+      this.eventos.sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
     }
   }
 }
-
-
-
-
-
