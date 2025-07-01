@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TareasPage } from './tareas.page';
+import { TareaFormPage } from './tarea-form.page';
+import { AuthGuard } from '../../guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: TareasPage
+    component: TareaFormPage,
+    canActivate: [AuthGuard]
   }
 ];
 
@@ -13,4 +15,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class TareasPageRoutingModule {}
+export class TareaFormPageRoutingModule {}

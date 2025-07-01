@@ -3,119 +3,76 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home" text="" color="light"></ion-back-button>
     </ion-buttons>
-    <ion-title>Perfil de Usuario</ion-title>
+    <ion-title>Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form (ngSubmit)="guardarPerfil()">
-    <!-- Avatar del usuario -->
-    <div class="perfil-avatar">
-      <ion-avatar>
-        <img [src]="fotoPerfil || 'assets/img/avatar-default.png'" />
-      </ion-avatar>
-      <ion-button expand="block" (click)="seleccionarFoto()">Cambiar Foto</ion-button>
-      <input type="file" accept="image/*" #fileInput (change)="cargarFoto($event)" hidden />
+  <div class="perfil-avatar">
+    <div class="avatar-con-fondo">
+      <img *ngIf="usuario.foto" [src]="usuario.foto" alt="Foto de perfil">
+      <ion-icon *ngIf="!usuario.foto" name="person-outline"></ion-icon>
     </div>
 
-    <!-- Datos de perfil -->
-    <ion-item>
-      <ion-label position="floating">Nombres</ion-label>
-      <ion-input [(ngModel)]="perfil.nombres" name="nombres" required></ion-input>
-    </ion-item>
+    <ion-button expand="block" size="small" (click)="seleccionarFoto()">
+      Cambiar foto
+    </ion-button>
+    <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden #fileInput>
+  </div>
 
-    <ion-item>
-      <ion-label position="floating">Apellido Paterno</ion-label>
-      <ion-input [(ngModel)]="perfil.apellidoPaterno" name="apellidoPaterno" required></ion-input>
-    </ion-item>
+  <h2>Editar mis datos</h2>
 
-    <ion-item>
-      <ion-label position="floating">Apellido Materno</ion-label>
-      <ion-input [(ngModel)]="perfil.apellidoMaterno" name="apellidoMaterno"></ion-input>
-    </ion-item>
+  <ion-item>
+    <ion-label position="floating">Nombres</ion-label>
+    <ion-input [(ngModel)]="usuario.nombres"></ion-input>
+  </ion-item>
 
-    <ion-item>
-      <ion-label>Género</ion-label>
-      <ion-select [(ngModel)]="perfil.genero" name="genero" interface="popover">
-        <ion-select-option value="masculino">Masculino</ion-select-option>
-        <ion-select-option value="femenino">Femenino</ion-select-option>
-        <ion-select-option value="otro">Otro</ion-select-option>
-      </ion-select>
-    </ion-item>
+  <ion-item>
+    <ion-label position="floating">Apellido Paterno</ion-label>
+    <ion-input [(ngModel)]="usuario.apellidoPaterno"></ion-input>
+  </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Fecha de Nacimiento</ion-label>
-      <ion-datetime
-        presentation="date"
-        [(ngModel)]="perfil.fechaNacimiento"
-        name="fechaNacimiento">
-      </ion-datetime>
-    </ion-item>
+  <ion-item>
+    <ion-label position="floating">Apellido Materno</ion-label>
+    <ion-input [(ngModel)]="usuario.apellidoMaterno"></ion-input>
+  </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Correo Electrónico</ion-label>
-      <ion-input [(ngModel)]="perfil.email" name="email" type="email" required></ion-input>
-    </ion-item>
+  <ion-item>
+    <ion-label position="floating">Género</ion-label>
+    <ion-input [(ngModel)]="usuario.genero"></ion-input>
+  </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Teléfono Celular</ion-label>
-      <ion-input [(ngModel)]="perfil.telefono" name="telefono" type="tel"></ion-input>
-    </ion-item>
+  <ion-item>
+    <ion-label position="floating">Fecha de Nacimiento</ion-label>
+    <ion-datetime
+      [(ngModel)]="usuario.fechaNacimiento"
+      presentation="date"
+      prefer="wheel"
+      display-format="DD MMMM YYYY"
+      picker-format="DD MMMM YYYY">
+    </ion-datetime>
+  </ion-item>
 
-    <ion-item>
-      <ion-label>País</ion-label>
-      <ion-select [(ngModel)]="perfil.pais" name="pais" interface="popover">
-        <ion-select-option value="Chile">Chile</ion-select-option>
-        <ion-select-option value="Argentina">Argentina</ion-select-option>
-        <ion-select-option value="Peru">Perú</ion-select-option>
-      </ion-select>
-    </ion-item>
+  <ion-item>
+    <ion-label position="floating">Email</ion-label>
+    <ion-input [(ngModel)]="usuario.email"></ion-input>
+  </ion-item>
 
-    <ion-item lines="none">
-      <ion-label>Verificación de Correo Electrónico</ion-label>
-      <ion-button expand="block" fill="outline" (click)="enviarVerificacionEmail()">
-        Enviar Email de Verificación
-      </ion-button>
-    </ion-item>
+  <ion-item>
+    <ion-label position="floating">Teléfono</ion-label>
+    <ion-input [(ngModel)]="usuario.telefono"></ion-input>
+  </ion-item>
 
-    <!-- Cambio de contraseña -->
-    <ion-item>
-      <ion-label position="floating">Nueva Contraseña</ion-label>
-      <ion-input [(ngModel)]="nuevaContrasena" name="nuevaContrasena" type="password"></ion-input>
-    </ion-item>
+  <ion-item>
+    <ion-label position="floating">País</ion-label>
+    <ion-input [(ngModel)]="usuario.pais"></ion-input>
+  </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Confirmar Contraseña</ion-label>
-      <ion-input [(ngModel)]="confirmarContrasena" name="confirmarContrasena" type="password"></ion-input>
-    </ion-item>
-
-    <ion-button expand="block" (click)="cambiarContrasena()" type="button">Cambiar Contraseña</ion-button>
-
-    <!-- Guardar cambios -->
-    <ion-button expand="full" type="submit">Guardar Cambios</ion-button>
-  </form>
+  <ion-button
+    class="boton-guardar"
+    expand="block"
+    size="large"
+    (click)="guardarCambios()">
+    Guardar cambios
+  </ion-button>
 </ion-content>
-
-<style>
-.perfil-avatar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-ion-avatar {
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  margin-bottom: 10px;
-}
-
-ion-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-</style>

@@ -18,7 +18,6 @@
 
     <ion-card-content>
       <form #formulario="ngForm" (ngSubmit)="registrar(formulario)">
-
         <ion-item>
           <ion-label position="floating">Nombres</ion-label>
           <ion-input [(ngModel)]="usuario.nombres" name="nombres" required></ion-input>
@@ -42,17 +41,12 @@
           </ion-select>
         </ion-item>
 
-        <!-- 🎯 Fecha de Nacimiento -->
         <ion-item>
           <ion-label>Fecha de Nacimiento</ion-label>
           <ion-datetime
             [(ngModel)]="usuario.fechaNacimiento"
             name="fechaNacimiento"
             presentation="date"
-            preferWheel="true"
-            cancelText="Cancelar"
-            doneText="Aceptar"
-            showDefaultButtons="true"
             (ionChange)="guardarFecha($any($event))">
           </ion-datetime>
         </ion-item>
@@ -79,6 +73,16 @@
             <ion-select-option value="Perú">Perú</ion-select-option>
             <ion-select-option value="México">México</ion-select-option>
           </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Contraseña</ion-label>
+          <ion-input [(ngModel)]="usuario.contrasena" name="contrasena" type="password" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Confirmar Contraseña</ion-label>
+          <ion-input [(ngModel)]="confirmarContrasena" name="confirmarContrasena" type="password" required></ion-input>
         </ion-item>
 
         <ion-button expand="full" type="submit" class="guardar-btn ion-margin-top" [disabled]="formulario.invalid">

@@ -1,76 +1,72 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { PerfilService } from 'src/app/services/perfil.service'; // RUTA CORRECTA
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { ToastController } from '@ionic/angular';
+import { Storage } from '@ionic/storage-angular';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss'],
-  standalone: false,
+  standalone:false,
 })
-export class PerfilPage {
-  @ViewChild('fileInput', { static: false }) fileInput!: ElementRef<HTMLInputElement>;
+export class PerfilPage implements OnInit {
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
-  fotoPerfil: string = '';
-  nuevaContrasena: string = '';
-  confirmarContrasena: string = '';
+  usuario: any = {};
 
-  perfil = {
-    nombres: '',
-    apellidoPaterno: '',
-    apellidoMaterno: '',
-    genero: '',
-    fechaNacimiento: '',
-    email: '',
-    telefono: '',
-    pais: ''
-  };
+  constructor(
+    private storage: Storage,
+    private toastController: ToastController
+  ) {}
 
-  constructor(private perfilService: PerfilService) {
-    // Suscribirse al observable para mantener sincronizada la foto
-    this.perfilService.fotoPerfil$.subscribe(url => {
-      this.fotoPerfil = url;
-    });
+  async ngOnInit() {
+    await this.storage.create();
+    await this.cargarUsuario();
+  }
+
+  async cargarUsuario() {
+    this.usuario = await this.storage.get('usuario') || {};
+    if (this.usuario.fechaNacimiento) {
+      this.usuario.fechaNacimiento = new Date(this.usuario.fechaNacimiento)
+        .toISOString().substring(0, 10);
+    }
+  }
+
+  async guardarCambios() {
+    if (this.usuario.fechaNacimiento) {
+      this.usuario.fechaNacimiento = new Date(this.usuario.fechaNacimiento)
+        .toISOString().substring(0, 10);
+    }
+    await this.storage.set('usuario', this.usuario);
+    this.mostrarToast('Datos actualizados correctamente', 'success');
   }
 
   seleccionarFoto() {
     this.fileInput.nativeElement.click();
   }
 
-  cargarFoto(event: Event) {
+  onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    const archivo = input.files?.[0];
-    if (archivo) {
-      const lector = new FileReader();
-      lector.onload = () => {
-        this.fotoPerfil = lector.result as string;
-        this.perfilService.setFotoPerfil(this.fotoPerfil); // sincroniza con menú
-      };
-      lector.readAsDataURL(archivo);
-    }
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      this.usuario.foto = reader.result as string;
+      await this.storage.set('usuario', this.usuario);
+      this.mostrarToast('Foto actualizada', 'success');
+    };
+
+    reader.readAsDataURL(file);
   }
 
-  guardarPerfil() {
-    this.perfilService.setNombre(this.perfil.nombres); // sincroniza el nombre en el menú
-    console.log('Perfil guardado:', this.perfil);
-  }
-
-  enviarVerificacionEmail() {
-    alert('Se ha enviado un correo de verificación (simulado)');
-  }
-
-  cambiarContrasena() {
-    if (!this.nuevaContrasena || !this.confirmarContrasena) {
-      alert('Debes ingresar ambas contraseñas.');
-      return;
-    }
-
-    if (this.nuevaContrasena !== this.confirmarContrasena) {
-      alert('Las contraseñas no coinciden.');
-      return;
-    }
-
-    alert('Contraseña actualizada exitosamente (simulado)');
-    this.nuevaContrasena = '';
-    this.confirmarContrasena = '';
+  async mostrarToast(msg: string, color: string) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000,
+      color,
+      position: 'bottom'
+    });
+    await toast.present();
   }
 }

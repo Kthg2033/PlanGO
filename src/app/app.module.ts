@@ -1,25 +1,31 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicModule } from '@ionic/angular';
-import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';  // <-- Importa ReactiveFormsModule aquí
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
 
-import { EventModalComponent } from './components/evento-modal/event-modal.component';
+import { AppComponent } from './app.component';
+import { EventModalModule } from './components/evento-modal/event-modal.module';
+
+import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 
 @NgModule({
-  declarations: [AppComponent, EventModalComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    HttpClientModule,
     FormsModule,
-    IonicStorageModule.forRoot()
+    ReactiveFormsModule,   // <-- Agrega esto
+    HttpClientModule,
+    IonicStorageModule.forRoot(),
+    EventModalModule
   ],
-  providers: [],
+  providers: [
+    SQLite
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -5,7 +5,11 @@ describe('TareasPage', () => {
   let component: TareasPage;
   let fixture: ComponentFixture<TareasPage>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [TareasPage],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TareasPage);
     component = fixture.componentInstance;
     fixture.detectChanges();

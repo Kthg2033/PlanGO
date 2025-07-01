@@ -5,7 +5,7 @@ import { ModalController } from '@ionic/angular';
   selector: 'app-event-modal',
   templateUrl: './event-modal.component.html',
   styleUrls: ['./event-modal.component.scss'],
-  standalone: false,
+  standalone:false,
 })
 export class EventModalComponent {
   @Input() date!: string;
@@ -31,7 +31,7 @@ export class EventModalComponent {
       ubicacion: this.ubicacion,
       notas: this.notas,
       repetir: this.repetir,
-      horaInicio: new Date(this.horaInicio).toTimeString().slice(0, 5), // solo "HH:mm"
+      horaInicio: new Date(this.horaInicio).toTimeString().slice(0, 5),
       horaFin: new Date(this.horaFin).toTimeString().slice(0, 5),
       date: this.date
     });

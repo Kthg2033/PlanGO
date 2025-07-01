@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { Storage } from '@ionic/storage-angular';
 
 interface Usuario {
   nombres: string;
@@ -19,7 +20,7 @@ interface Usuario {
   selector: 'app-register',
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
-  standalone: false,
+  standalone:false,
 })
 export class RegisterPage {
   usuario: Usuario = {
@@ -39,22 +40,26 @@ export class RegisterPage {
 
   constructor(
     private toastController: ToastController,
-    private router: Router
+    private router: Router,
+    private storage: Storage
   ) {}
+
+  async ngOnInit() {
+    await this.storage.create();
+  }
 
   async registrar(formulario: NgForm) {
     if (formulario.invalid) return;
 
-    console.log('Datos enviados:', this.usuario);
+    if (this.usuario.contrasena !== this.confirmarContrasena) {
+      this.mostrarToast('Las contraseñas no coinciden', 'danger');
+      return;
+    }
 
-    const toast = await this.toastController.create({
-      message: '¡Registro exitoso!',
-      duration: 2000,
-      color: 'success',
-      position: 'bottom'
-    });
-    await toast.present();
+    await this.storage.set('usuario', this.usuario);
+    console.log('Usuario registrado y guardado en Storage:', this.usuario);
 
+    this.mostrarToast('¡Registro exitoso!', 'success');
     this.router.navigate(['/login']);
   }
 
@@ -68,5 +73,15 @@ export class RegisterPage {
       month: 'long',
       year: 'numeric'
     });
+  }
+
+  async mostrarToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      color,
+      position: 'bottom'
+    });
+    await toast.present();
   }
 }

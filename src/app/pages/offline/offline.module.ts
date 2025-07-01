@@ -3,16 +3,16 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-import { TareasPageRoutingModule } from './tareas-routing.module';
-import { TareasPage } from './tareas.page';
+import { OfflinePageRoutingModule } from './offline-routing.module';
+import { OfflinePage } from './offline.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    TareasPageRoutingModule
+    OfflinePageRoutingModule
   ],
-  declarations: [TareasPage]
+  declarations: [OfflinePage]
 })
-export class TareasPageModule {}
+export class OfflinePageModule {}

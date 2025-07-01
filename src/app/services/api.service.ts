@@ -1,34 +1,34 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Network } from '@capacitor/network';
-import { SQLiteService } from './sqlite.service';
-import { Todo } from '../models/todo.model';
-import { firstValueFrom } from 'rxjs';
+import { Tarea } from '../models/tarea.model';
+import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class ApiService {
-  private baseUrl = 'https://jsonplaceholder.typicode.com';
+  private tareasUrl = 'https://64b67812df0839c97e1622ea.mockapi.io/api/v1/tareas';
 
-  constructor(
-    private http: HttpClient,
-    private sqliteService: SQLiteService
-  ) {}
+  constructor(private http: HttpClient) {}
 
-  async getTodos(): Promise<Todo[]> {
-    const { connected } = await Network.getStatus();
+  getTareas(): Observable<Tarea[]> {
+    return this.http.get<Tarea[]>(this.tareasUrl);
+  }
 
-    if (connected) {
-      try {
-        const todos = await firstValueFrom(this.http.get<Todo[]>(`${this.baseUrl}/todos`));
-        if (todos) {
-          await this.sqliteService.saveTodos(todos);
-          return todos;
-        }
-      } catch (e) {
-        console.warn('Error al obtener datos desde API, usando SQLite.');
-      }
-    }
+  getTarea(id: number): Observable<Tarea> {
+    return this.http.get<Tarea>(`${this.tareasUrl}/${id}`);
+  }
 
-    return await this.sqliteService.getTodos();
+  crearTarea(tarea: Omit<Tarea, 'id'>): Observable<Tarea> {
+    // NO mandamos el id porque lo crea el backend
+    return this.http.post<Tarea>(this.tareasUrl, tarea);
+  }
+
+  actualizarTarea(id: number, tarea: Tarea): Observable<Tarea> {
+    return this.http.put<Tarea>(`${this.tareasUrl}/${id}`, tarea);
+  }
+
+  eliminarTarea(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.tareasUrl}/${id}`);
   }
 }
