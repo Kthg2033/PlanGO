@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ApiService } from '../../services/api.service';
 import { Tarea } from '../../models/tarea.model';
 
 @Component({
   selector: 'app-tarea-form',
   templateUrl: './tarea-form.page.html',
   styleUrls: ['./tarea-form.page.scss'],
-  standalone:false,
+  standalone: false,
 })
 export class TareaFormPage implements OnInit {
   tareaForm!: FormGroup;
   tareaId: number | null = null;
   editMode: boolean = false;
+  tareas: Tarea[] = [];
 
   prioridades = ['Alta', 'Media', 'Baja'];
   categorias = ['Salud', 'Productividad', 'Hogar', 'Finanzas', 'Estudio'];
@@ -21,12 +21,10 @@ export class TareaFormPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-    private api: ApiService
+    private router: Router
   ) {}
 
   ngOnInit() {
-    // Inicializa el formulario con validaciones
     this.tareaForm = this.fb.group({
       nombre: ['', Validators.required],
       descripcion: [''],
@@ -34,72 +32,49 @@ export class TareaFormPage implements OnInit {
       categoria: ['', Validators.required],
       fechaSugerida: [''],
       notas: [''],
-      completada: [false]
+      completada: [false],
+      puntos: [0],
+      racha: [0]
     });
 
-    // Revisar si hay ID para modo edición
+    this.tareas = JSON.parse(localStorage.getItem('tareas') || '[]');
+
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.tareaId = +idParam;
       this.editMode = true;
 
-      // Cargar tarea y setear valores en formulario
-      this.api.getTarea(this.tareaId).subscribe({
-        next: (data: Tarea) => {
-          this.tareaForm.patchValue(data);
-        },
-        error: (error) => {
-          console.error('Error al cargar la tarea:', error);
-        }
-      });
+      const tareaExistente = this.tareas.find(t => t.id === this.tareaId);
+      if (tareaExistente) {
+        this.tareaForm.patchValue(tareaExistente);
+      }
     }
   }
 
   guardar(): void {
-    console.log('Guardar fue presionado');
+    console.log('🟢 Guardar presionado con datos:', this.tareaForm.value);
 
     if (!this.tareaForm.valid) {
-      console.log('Formulario inválido:', this.tareaForm.value);
+      console.log('❌ Formulario inválido:', this.tareaForm.value);
       return;
     }
 
     if (this.editMode && this.tareaId !== null) {
-      // Actualizar tarea existente
-      const tareaActualizada: Tarea = {
-        ...this.tareaForm.value,
-        id: this.tareaId,
-        puntos: 0,
-        racha: 0
-      };
-      console.log('Actualizando tarea:', tareaActualizada);
-
-      this.api.actualizarTarea(this.tareaId, tareaActualizada).subscribe({
-        next: () => {
-          console.log('Tarea actualizada con éxito');
-          this.router.navigate(['/tareas']);
-        },
-        error: (error) => {
-          console.error('Error al actualizar:', error);
-        }
-      });
+      const index = this.tareas.findIndex(t => t.id === this.tareaId);
+      if (index !== -1) {
+        this.tareas[index] = { ...this.tareaForm.value, id: this.tareaId };
+      }
+      console.log('✍ Tarea actualizada:', this.tareas[index]);
     } else {
-      // Crear nueva tarea
-      const nuevaTarea: Omit<Tarea, 'id'> = {
+      const nuevaTarea: Tarea = {
         ...this.tareaForm.value,
-        puntos: 0,
-        racha: 0
+        id: new Date().getTime() // id único
       };
-      console.log('Creando nueva tarea:', nuevaTarea);
-
-      this.api.crearTarea(nuevaTarea).subscribe({
-        next: () => {
-          console.log('Tarea creada con éxito');
-          this.router.navigate(['/tareas']);
-        },
-        error: (error) => {
-          console.error('Error al crear tarea:', error);
-        }
-      });
+      this.tareas.unshift(nuevaTarea);
+      console.log('🆕 Tarea creada:', nuevaTarea);
     }
+
+    localStorage.setItem('tareas', JSON.stringify(this.tareas));
+    this.router.navigate(['/tareas']);
   }
 }

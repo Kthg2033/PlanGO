@@ -18,6 +18,7 @@
 
     <ion-card-content>
       <form #formulario="ngForm" (ngSubmit)="registrar(formulario)">
+
         <ion-item>
           <ion-label position="floating">Nombres</ion-label>
           <ion-input [(ngModel)]="usuario.nombres" name="nombres" required></ion-input>
@@ -42,11 +43,12 @@
         </ion-item>
 
         <ion-item>
-          <ion-label>Fecha de Nacimiento</ion-label>
+          <ion-label position="stacked">Fecha de Nacimiento</ion-label>
           <ion-datetime
             [(ngModel)]="usuario.fechaNacimiento"
             name="fechaNacimiento"
             presentation="date"
+            preferWheel="false"
             (ionChange)="guardarFecha($any($event))">
           </ion-datetime>
         </ion-item>
@@ -60,10 +62,38 @@
           <ion-input [(ngModel)]="usuario.email" name="email" type="email" required></ion-input>
         </ion-item>
 
+        <!-- Teléfono + código juntos -->
         <ion-item>
-          <ion-label position="floating">Teléfono Celular</ion-label>
-          <ion-input [(ngModel)]="usuario.telefono" name="telefono" type="tel" required></ion-input>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="4">
+                <ion-select [(ngModel)]="usuario.codigoPais" name="codigoPais" interface="popover" placeholder="+">
+                  <ion-select-option value="+56">+56</ion-select-option>
+                  <ion-select-option value="+54">+54</ion-select-option>
+                  <ion-select-option value="+51">+51</ion-select-option>
+                  <ion-select-option value="+52">+52</ion-select-option>
+                </ion-select>
+              </ion-col>
+              <ion-col size="8">
+                <ion-input [(ngModel)]="usuario.telefono"
+                           name="telefono"
+                           type="tel"
+                           maxlength="9"
+                           pattern="[0-9]*"
+                           inputmode="numeric"
+                           required
+                           placeholder="Celular"
+                           (ionInput)="validarTelefono($event)">
+                </ion-input>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </ion-item>
+
+        <ion-text color="danger" class="ion-margin-start"
+          *ngIf="(usuario.telefono || '').length > 0 && (usuario.telefono || '').length !== 9">
+          El número debe tener exactamente 9 dígitos.
+        </ion-text>
 
         <ion-item>
           <ion-label>País</ion-label>
@@ -75,17 +105,35 @@
           </ion-select>
         </ion-item>
 
+        <!-- Contraseña con ojo corregido -->
         <ion-item>
           <ion-label position="floating">Contraseña</ion-label>
-          <ion-input [(ngModel)]="usuario.contrasena" name="contrasena" type="password" required></ion-input>
+          <ion-input [(ngModel)]="usuario.contrasena"
+                     [type]="verPassword ? 'text' : 'password'"
+                     name="contrasena"
+                     required>
+          </ion-input>
+          <ion-icon slot="end"
+                    [name]="verPassword ? 'eye-outline' : 'eye-off-outline'"
+                    (click)="verPassword = !verPassword">
+          </ion-icon>
         </ion-item>
 
+        <!-- Confirmar contraseña con ojo corregido -->
         <ion-item>
           <ion-label position="floating">Confirmar Contraseña</ion-label>
-          <ion-input [(ngModel)]="confirmarContrasena" name="confirmarContrasena" type="password" required></ion-input>
+          <ion-input [(ngModel)]="confirmarContrasena"
+                     [type]="verConfirmPassword ? 'text' : 'password'"
+                     name="confirmarContrasena"
+                     required>
+          </ion-input>
+          <ion-icon slot="end"
+                    [name]="verConfirmPassword ? 'eye-outline' : 'eye-off-outline'"
+                    (click)="verConfirmPassword = !verConfirmPassword">
+          </ion-icon>
         </ion-item>
 
-        <ion-button expand="full" type="submit" class="guardar-btn ion-margin-top" [disabled]="formulario.invalid">
+        <ion-button expand="full" type="submit" class="guardar-btn ion-margin-top">
           Registrarse
         </ion-button>
       </form>

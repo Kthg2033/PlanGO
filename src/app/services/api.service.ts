@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private tareasUrl = 'https://64b67812df0839c97e1622ea.mockapi.io/api/v1/tareas';
+  private tareasUrl = 'http://localhost:3000/api/tareas'; // Cambia a tu URL real
 
   constructor(private http: HttpClient) {}
 
@@ -20,7 +20,6 @@ export class ApiService {
   }
 
   crearTarea(tarea: Omit<Tarea, 'id'>): Observable<Tarea> {
-    // NO mandamos el id porque lo crea el backend
     return this.http.post<Tarea>(this.tareasUrl, tarea);
   }
 

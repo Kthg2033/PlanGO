@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from 'src/app/services/api.service';
-import { Tarea } from 'src/app/models/tarea.model';
-import { NavController } from '@ionic/angular';  // <-- importar NavController
+import { Tarea } from '../../models/tarea.model';
+import { NavController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tareas',
@@ -12,11 +11,13 @@ import { NavController } from '@ionic/angular';  // <-- importar NavController
 })
 export class TareasPage implements OnInit {
   tareas: Tarea[] = [];
+  showConfetti = false;
+  confettiPieces = Array(30);
 
   constructor(
-    private api: ApiService,
     private router: Router,
-    private navCtrl: NavController  // <-- inyectar NavController
+    private navCtrl: NavController,
+    private toastCtrl: ToastController
   ) {}
 
   ngOnInit() {
@@ -28,38 +29,96 @@ export class TareasPage implements OnInit {
   }
 
   cargarTareas() {
-    this.api.getTareas().subscribe(data => {
-      this.tareas = data;
-    });
+    this.tareas = JSON.parse(localStorage.getItem('tareas') || '[]');
   }
 
-  editarTarea(id: number) {
-    this.router.navigate(['/tarea-form', id]);
+  guardarTareas() {
+    localStorage.setItem('tareas', JSON.stringify(this.tareas));
   }
 
   agregarTarea() {
     this.router.navigate(['/tarea-form']);
   }
 
+  editarTarea(tarea: Tarea) {
+    this.router.navigate(['/tarea-form', tarea.id]);
+  }
+
   eliminarTarea(id: number) {
-    this.api.eliminarTarea(id).subscribe(() => {
-      this.cargarTareas();
-    });
+    this.tareas = this.tareas.filter(t => t.id !== id);
+    this.guardarTareas();
+    this.mostrarToast('Tarea eliminada');
+    this.verificarLogroGlobal();
   }
 
   toggleCompletada(tarea: Tarea) {
-    tarea.completada = !tarea.completada;
-    if (tarea.completada) {
-      tarea.puntos += 10;
-      tarea.racha += 1;
+    if (!tarea.completada) {
+      tarea.completada = true;
+      tarea.puntos = 10;
+      tarea.racha = 1;
     } else {
+      tarea.completada = false;
+      tarea.puntos = 0;
       tarea.racha = 0;
     }
-    this.api.actualizarTarea(tarea.id, tarea).subscribe();
+    this.guardarTareas();
+    this.verificarLogroGlobal(); // 💡 verifica los puntos globales cada vez
   }
 
-  // <-- Aquí el método para volver atrás
+  getTotalPuntos() {
+    return this.tareas.reduce((total, tarea) => total + tarea.puntos, 0);
+  }
+
+  getTotalRacha() {
+    return this.tareas.reduce((total, tarea) => total + tarea.racha, 0);
+  }
+
+  async mostrarToast(mensaje: string) {
+    const toast = await this.toastCtrl.create({
+      message: mensaje,
+      duration: 2000,
+      color: 'success',
+      position: 'bottom'
+    });
+    await toast.present();
+  }
+
+  async verificarLogroGlobal() {
+    const totalPuntos = this.getTotalPuntos();
+    let mensaje = '';
+
+    if (totalPuntos >= 100) {
+      mensaje = '¡Wow! Has llegado a 100 puntos, eso demuestra constancia.';
+      this.lanzarConfetti();
+    } else if (totalPuntos >= 50) {
+      mensaje = '¡Estás haciendo un gran trabajo! Alcanzaste 50 puntos.';
+    } else if (totalPuntos >= 30) {
+      mensaje = '¡Buen avance! Ya llevas 30 puntos. Sigue así.';
+    }
+
+    if (mensaje) {
+      const toast = await this.toastCtrl.create({
+        message: mensaje,
+        duration: 2500,
+        color: 'tertiary',
+        position: 'top'
+      });
+      await toast.present();
+    }
+  }
+
+  lanzarConfetti() {
+    this.showConfetti = true;
+    setTimeout(() => {
+      this.showConfetti = false;
+    }, 3000);
+  }
+
   volverAtras() {
-    this.navCtrl.back();
+    this.navCtrl.navigateBack('/home');
+  }
+
+  trackById(index: number, tarea: Tarea) {
+    return tarea.id;
   }
 }

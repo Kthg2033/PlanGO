@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Dashboard semanal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Resumen</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>🎯 Total puntos: {{ totalPuntos() }}</p>
+      <p>🔥 Racha acumulada: {{ totalRacha() }}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <div style="display: block;">
+    <canvas baseChart
+      [data]="barChartData"
+      chartType="bar">
+    </canvas>
+  </div>
+</ion-content>
