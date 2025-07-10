@@ -5,7 +5,7 @@ import { Storage } from '@ionic/storage-angular';
 import { ToastController } from '@ionic/angular';
 
 @Component({
-  standalone:false,
+  standalone: false,
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
@@ -27,7 +27,6 @@ export class LoginPage {
   }
 
   async login(): Promise<void> {
-    // Validar que el correo tenga formato válido
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(this.usuario.trim())) {
       this.presentToast('Por favor ingresa un correo electrónico válido', 'danger');
@@ -35,7 +34,6 @@ export class LoginPage {
     }
 
     const usuarioGuardado = await this.storage.get('usuario');
-
     if (!usuarioGuardado) {
       this.presentToast('No hay usuario registrado aún', 'danger');
       return;
@@ -48,9 +46,7 @@ export class LoginPage {
 
     if (emailIngresado === emailGuardado && passIngresado === passGuardado) {
       this.perfilService.setNombre(usuarioGuardado.nombres);
-
       await this.storage.set('isLoggedIn', true);
-
       this.router.navigate(['/home']);
       this.presentToast('Login correcto, redirigiendo...', 'success');
     } else {

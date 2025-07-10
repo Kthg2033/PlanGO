@@ -20,20 +20,26 @@
         <ion-input [(ngModel)]="usuario" name="usuario" type="email" required></ion-input>
       </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">Contraseña</ion-label>
-        <ion-input
-          [(ngModel)]="password"
-          name="password"
-          [type]="mostrarContrasena ? 'text' : 'password'"
-          required>
-        </ion-input>
+      <!-- Contraseña con texto y ojo al lado -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px; margin-bottom: 6px;">
+        <label style="font-size: 0.9rem; color: var(--ion-color-medium);">
+          Contraseña
+        </label>
         <ion-icon
-          slot="end"
-          [name]="mostrarContrasena ? 'eye' : 'eye-off'"
-          style="color: #000; font-size: 1.5rem;"
+          [attr.name]="mostrarContrasena ? 'eye' : 'eye-off'"
+          style="font-size: 1.5rem; cursor: pointer; color: #333;"
           (click)="togglePasswordVisibility()">
         </ion-icon>
+      </div>
+
+      <ion-item lines="full">
+        <ion-input
+          [(ngModel)]="password"
+          [type]="mostrarContrasena ? 'text' : 'password'"
+          style="width: 100%;"
+          name="password"
+          required>
+        </ion-input>
       </ion-item>
 
       <ion-button expand="block" (click)="login()">Ingresar</ion-button>

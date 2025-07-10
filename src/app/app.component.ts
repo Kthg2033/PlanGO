@@ -41,8 +41,10 @@ export class AppComponent implements OnInit {
     await this.obtenerUbicacion();
 
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(async (event: NavigationEnd) => {
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+      )
+      .subscribe(async (event) => {
         const url = event.urlAfterRedirects;
         this.showMenu = !url.includes('/login') && !url.includes('/register');
         await this.cargarUsuario();
