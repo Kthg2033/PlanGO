@@ -8,6 +8,7 @@ describe('AgendaPage', () => {
   let fixture: ComponentFixture<AgendaPage>;
 
   beforeEach(async () => {
+    console.log('🚀 [SPEC] beforeEach ejecutándose para AgendaPage');
     await TestBed.configureTestingModule({
       declarations: [AgendaPage],
       imports: [IonicModule.forRoot(), IonicStorageModule.forRoot()]
@@ -19,6 +20,7 @@ describe('AgendaPage', () => {
   });
 
   it('should create', () => {
+    console.log('✅ [SPEC] Ejecutando el test should create');
     expect(component).toBeTruthy();
   });
 });
