@@ -9,19 +9,27 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AppComponent],
+<<<<<<< HEAD
       imports: [
         IonicModule.forRoot(),
         IonicStorageModule.forRoot()
       ],
+=======
+      imports: [IonicModule.forRoot(), IonicStorageModule.forRoot()],
+>>>>>>> b06e66c (Corrijo tests unitarios, agrego pruebas E2E con Cypress y actualizo specs)
       providers: [
         {
           provide: ActivatedRoute,
           useValue: {
+<<<<<<< HEAD
             snapshot: {
               paramMap: {
                 get: (key: string) => null
               }
             },
+=======
+            queryParams: of({}),
+>>>>>>> b06e66c (Corrijo tests unitarios, agrego pruebas E2E con Cypress y actualizo specs)
             params: of({})
           }
         }
